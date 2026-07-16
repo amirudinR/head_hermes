@@ -56,6 +56,20 @@ const DEFAULT_AGENTS = [
     systemPrompt: 'Kamu adalah Task Distributor. Pecah project menjadi sub-task dan assign ke worker yang tepat.',
   },
   {
+    id: 'hermes-md',
+    name: 'Archivist',
+    badge: 'MD',
+    role: 'archivist',
+    engine: 'hermes',
+    provider: 'opencode',
+    model: 'deepseek-v4-flash-free',
+    status: 'online',
+    minimized: false,
+    closed: false,
+    messages: [{ role: 'system', content: 'Kamu adalah Agent Archivist (MD). Catat semua progres, task completion, keputusan, dan perubahan dalam format markdown. Buat ringkasan eksekutif secara periodik. Maintain dokumentasi proyek yang terstruktur: # Progress Log, ## Completed Tasks, ## Decisions, ## Blockers.' }],
+    systemPrompt: 'Kamu adalah Agent Archivist (MD). Catat semua progres, task completion, dan keputusan dalam format markdown. Maintain dokumentasi proyek yang terstruktur.',
+  },
+  {
     id: 'hermes-watcher',
     name: 'Watcher',
     badge: 'WATCHER',
@@ -126,6 +140,7 @@ export function AppProvider({ children }) {
   const [deployModalOpen, setDeployModalOpen] = useState(false);
   const [agentCounter, setAgentCounter] = useState(() => calcNextCounter(initialAgents));
   const [contextMenu, setContextMenu] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth > 768);
 
   useEffect(() => { saveState(agents); }, [agents]);
 
@@ -173,8 +188,17 @@ export function AppProvider({ children }) {
 
   const restartAgent = async (id) => {
     updateAgent(id, { status: 'connecting' });
-    await new Promise(r => setTimeout(r, 1500));
-    updateAgent(id, { status: 'offline' });
+    // Try to ping the opencode port as a health check
+    try {
+      const res = await fetch('/api/health', { signal: AbortSignal.timeout(4000) });
+      const data = await res.json();
+      const opencodeLive = data.opencode?.status === 'online';
+      await new Promise(r => setTimeout(r, 1200));
+      updateAgent(id, { status: opencodeLive ? 'online' : 'offline' });
+    } catch {
+      await new Promise(r => setTimeout(r, 1200));
+      updateAgent(id, { status: 'offline' });
+    }
   };
 
   const deployAgent = (name, engine, provider, model) => {
@@ -233,6 +257,7 @@ export function AppProvider({ children }) {
       health, systemInfo,
       deployModalOpen, setDeployModalOpen,
       contextMenu, setContextMenu,
+      sidebarOpen, setSidebarOpen, toggleSidebar: () => setSidebarOpen(s => !s),
       minimizeAgent, maximizeAgent, closeAgent, restoreAgent,
       restartAgent, deployAgent, sendMessage,
       fetchProviders, fetchHealth, fetchSystem,

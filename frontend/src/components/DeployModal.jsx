@@ -10,7 +10,9 @@ function DeployModal() {
 
   const workerCount = agents.filter(a => a.role === 'worker' && !a.closed).length;
   const slotsLeft = 7 - workerCount;
-  const filteredModels = selectedProvider === '9router' ? models : models;
+  const filteredModels = selectedProvider === '9router'
+    ? models
+    : models.filter(m => m.provider !== '9router');
 
   const handleDeploy = () => {
     if (!name.trim()) return;

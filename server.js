@@ -214,8 +214,8 @@ const server = http.createServer(async (req, res) => {
 
   // ── Health ──
   if (url === '/api/health') {
-    const r = ROUTER.key ? await proxyToAPI(ROUTER.host, ROUTER.port, '/v1/models', {}, `Bearer ${ROUTER.key}`) : null;
-    const o = await proxyToAPI(OPENCODE.host, OPENCODE.port, '/v1/models', {}, null);
+    const r = ROUTER.key ? await proxyToAPI(ROUTER.hostname, ROUTER.port, '/v1/models', {}, `Bearer ${ROUTER.key}`) : null;
+    const o = await proxyToAPI(OPENCODE.hostname, OPENCODE.port, '/v1/models', {}, null);
     let rModels = [], oModels = [];
     try { if (r) { const j = JSON.parse(r.replace(/\ndata:\s*\[DONE\]/, '').trim()); rModels = (j.data || []).map(m => m.id || m.name); } } catch (e) { }
     try { if (o) { const j = JSON.parse(o); oModels = (j.data || []).map(m => m.id || m.name); } } catch (e) { }
@@ -227,7 +227,7 @@ const server = http.createServer(async (req, res) => {
   // ── Providers ──
   if (url === '/api/providers') {
     const oc = readOpenCodeProviders();
-    const rModels = ROUTER.key ? await proxyToAPI(ROUTER.host, ROUTER.port, '/v1/models', {}, `Bearer ${ROUTER.key}`) : null;
+    const rModels = ROUTER.key ? await proxyToAPI(ROUTER.hostname, ROUTER.port, '/v1/models', {}, `Bearer ${ROUTER.key}`) : null;
     let routerModels = [];
     try { if (rModels) { const j = JSON.parse(rModels.replace(/\ndata:\s*\[DONE\]/, '').trim()); routerModels = (j.data || []).map(m => ({ id: m.id || m.name, provider: '9router', label: (m.id || m.name).replace(/^[^/]+\//, '').replace(/[_-]/g, ' ') })); } } catch (e) { }
     return send({ providers: oc, models: routerModels });
@@ -258,7 +258,7 @@ const server = http.createServer(async (req, res) => {
         }
 
         // Default: 9router
-        const r = await proxyChat(ROUTER.host, ROUTER.port, ROUTER.key, { model, messages });
+        const r = await proxyChat(ROUTER.hostname, ROUTER.port, ROUTER.key, { model, messages });
         return send({ ...r, engine: '9router' });
       } catch (e) { send({ error: e.message }); }
     }); return;

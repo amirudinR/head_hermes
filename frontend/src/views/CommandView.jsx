@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from 'react';
-import { createDraggable, utils } from 'animejs';
+import { createDraggable } from 'animejs';
 import { useApp } from '../context/AppContext';
 import AgentCard from '../components/AgentCard';
 
-const SPECIAL_ORDER = ['hermes-overseer', 'hermes-distributor', 'hermes-watcher'];
+const SPECIAL_ORDER = ['hermes-overseer', 'hermes-distributor', 'hermes-md', 'hermes-watcher'];
 
 function CommandView() {
   const { agents, setDeployModalOpen } = useApp();
@@ -19,15 +19,16 @@ function CommandView() {
     const cards = canvasRef.current.querySelectorAll('.draggable-card');
     const instances = [];
     cards.forEach((card) => {
-      const inst = createDraggable(card, {
-        modifier: utils.wrap(-32, 32),
-        x: { modifier: utils.wrap(-128, 128) },
-      });
-      instances.push(inst);
+      try {
+        const inst = createDraggable(card, { container: canvasRef.current });
+        instances.push(inst);
+      } catch (e) {
+        // animejs drag failed silently — non-critical
+      }
     });
     draggableInstances.current = instances;
     return () => {
-      instances.forEach(inst => inst?.kill?.());
+      instances.forEach(inst => { try { inst?.kill?.(); } catch (_) {} });
     };
   }, [specialAgents.length, workerCount]);
 
@@ -44,7 +45,7 @@ function CommandView() {
       ) : (
         <div className="p-4 flex flex-col gap-4 min-h-full">
           {/* Special Agents Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
             {specialAgents.map(agent => (
               <div key={agent.id} className="draggable-card cursor-grab active:cursor-grabbing" style={{ touchAction: 'none' }}>
                 <AgentCard agent={agent} />

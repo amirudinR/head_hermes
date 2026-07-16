@@ -4,7 +4,8 @@ import { useApp } from '../context/AppContext';
 const ROLE_META = {
   overseer: { icon: 'visibility', label: 'Overseer', color: 'text-primary-fixed-dim' },
   distributor: { icon: 'call_split', label: 'Distributor', color: 'text-tertiary-fixed-dim' },
-  watcher: { icon: 'shield', label: 'Watcher', color: 'text-secondary-fixed-dim' },
+  archivist: { icon: 'description', label: 'Archivist', color: 'text-secondary-fixed-dim' },
+  watcher: { icon: 'shield', label: 'Watcher', color: 'text-inverse-surface' },
   worker: { icon: 'smart_toy', label: 'Worker', color: 'text-on-surface-variant' },
 };
 
@@ -28,7 +29,7 @@ function AgentsView() {
       <div className="flex flex-col gap-2">
         {agents.map(agent => {
           const rm = ROLE_META[agent.role] || ROLE_META.worker;
-          const isSpecial = ['overseer', 'distributor', 'watcher'].includes(agent.role);
+          const isSpecial = ['overseer', 'distributor', 'archivist', 'watcher'].includes(agent.role);
 
           return (
             <div key={agent.id} className={`flex items-center gap-4 px-6 py-4 rounded-2xl border backdrop-blur-xl transition-all ${

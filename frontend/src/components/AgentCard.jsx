@@ -11,7 +11,7 @@ function ContextMenu({ agentId, onClose }) {
   const { closeAgent, minimizeAgent, agents } = useApp();
   const ref = useRef(null);
   const agent = agents.find(a => a.id === agentId);
-  const isSpecial = ['overseer', 'distributor', 'watcher'].includes(agent?.role);
+  const isSpecial = ['overseer', 'distributor', 'archivist', 'watcher'].includes(agent?.role);
 
   useEffect(() => {
     const handler = e => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
@@ -54,8 +54,8 @@ function AgentCard({ agent }) {
   };
 
   const containerClass = isLarge
-    ? `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[400px]'}`
-    : `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[320px]'}`;
+    ? `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[400px] max-h-[75vh]'}`
+    : `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[320px] max-h-[65vh]'}`;
 
   return (
     <div className={containerClass} style={{ position: 'relative', resize: 'both', overflow: 'hidden', minWidth: isLarge ? '500px' : '300px', width: isLarge ? '640px' : '360px' }}>
@@ -106,6 +106,14 @@ function AgentCard({ agent }) {
               <div className="flex items-center gap-3 text-xs text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-tertiary-fixed-dim font-light">call_split</span>
                 <span>Siap membagi tugas — Kirim deskripsi project</span>
+              </div>
+            </div>
+          )}
+          {agent.role === 'archivist' && agent.messages?.length <= 1 && (
+            <div className="px-5 py-3 bg-surface-container-high/30 border-b border-white/5">
+              <div className="flex items-center gap-3 text-xs text-on-surface-variant">
+                <span className="material-symbols-outlined text-[16px] text-secondary-fixed-dim font-light">description</span>
+                <span>Mencatat semua progres & dokumentasi — Kirim update untuk dicatat</span>
               </div>
             </div>
           )}

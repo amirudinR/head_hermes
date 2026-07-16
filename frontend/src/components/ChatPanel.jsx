@@ -32,14 +32,14 @@ function ChatPanel({ agent }) {
   return (
     <>
       {isSpecial && agent.systemPrompt && (
-        <div className="px-6 py-2 border-b border-white/5 bg-primary-container/5 shrink-0">
+        <div className="px-5 py-2 border-b border-white/5 bg-primary-container/5 shrink-0">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[14px] text-primary-fixed-dim font-light">info</span>
             <span className="text-[11px] text-on-surface-variant/70">{agent.systemPrompt}</span>
           </div>
         </div>
       )}
-      <div ref={bodyRef} className="flex-1 p-6 overflow-y-auto custom-scroll font-body-sm flex flex-col gap-6">
+      <div ref={bodyRef} className="flex-1 p-5 overflow-y-auto custom-scroll font-body-sm flex flex-col gap-5">
         {(agent.messages || []).map((msg, i) => {
           if (msg.role === 'system') return (
             <div key={i} className="flex flex-col gap-1 max-w-[85%] self-start">
@@ -72,8 +72,8 @@ function ChatPanel({ agent }) {
         )}
       </div>
 
-      <div className="p-4 border-t border-white/5 bg-surface-container-lowest/30 shrink-0">
-        <div className="flex items-end bg-surface-container/50 rounded-2xl border border-white/5 focus-within:border-primary-container/30 transition-all px-2">
+      <div className="px-5 py-4 border-t border-white/5 bg-surface-container-lowest/30 shrink-0">
+        <div className="flex items-end bg-surface-container/50 rounded-2xl border border-white/5 focus-within:border-primary-container/30 transition-all">
           <textarea
             ref={textareaRef}
             className="w-full bg-transparent border-none text-on-surface font-body-sm focus:ring-0 placeholder-on-surface-variant/40 py-3 px-4 outline-none resize-none"

@@ -58,7 +58,7 @@ function AgentCard({ agent }) {
     : `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col overflow-hidden shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[320px]'}`;
 
   return (
-    <div className={containerClass} style={{ resize: 'both', overflow: 'hidden', minWidth: isLarge ? '500px' : '300px', maxWidth: isLarge ? '900px' : '500px' }}>
+    <div className={containerClass} style={{ position: 'relative', resize: 'both', overflow: 'hidden', minWidth: isLarge ? '500px' : '300px', width: isLarge ? '640px' : '360px' }}>
       <div className={`h-14 border-b border-white/5 flex items-center justify-between px-5 drag-handle bg-transparent group shrink-0`}>
         <div className="flex items-center gap-3 min-w-0">
           <span className={`w-2 h-2 rounded-full ${dotColor} shrink-0`}></span>

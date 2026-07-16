@@ -100,16 +100,19 @@ function proxyChat(host, port, authKey, body) {
   });
 }
 
-// ── Hermes Engine ──
+// ── Engine Executable Cache ──
+let _hermesExe = null;
 function findHermesExe() {
+  if (_hermesExe) return _hermesExe;
   const candidates = [
     path.join(os.homedir(), '.local', 'bin', 'hermes.exe'),
     path.join(os.homedir(), '.local', 'bin', 'hermes'),
     'hermes',
   ];
   for (const c of candidates) {
-    try { const r = execSync(`where ${c} 2>nul`, { encoding: 'utf8', timeout: 2000, windowsHide: true }).trim(); if (r) return c; } catch (e) { }
+    try { const r = execSync(`where ${c} 2>nul`, { encoding: 'utf8', timeout: 2000, windowsHide: true }).trim(); if (r) { _hermesExe = c; return c; } } catch (e) { }
   }
+  _hermesExe = 'hermes';
   return 'hermes';
 }
 
@@ -143,6 +146,27 @@ function hermesServeStatus() {
     child.stderr.on('data', d => out += d.toString());
     child.on('close', () => resolve({ running: out.toLowerCase().includes('running') || out.toLowerCase().includes('pid'), output: out.trim() }));
     child.on('error', () => resolve({ running: false, output: '' }));
+  });
+}
+
+// ── OpenCode Engine ──
+function opencodeRun(msg, sessionId) {
+  return new Promise(resolve => {
+    const args = sessionId
+      ? ['run', msg, '--session', sessionId, '--print-logs']
+      : ['run', msg, '--print-logs'];
+    const child = spawn('opencode', args, { shell: true, windowsHide: true, timeout: 300000 });
+    let stdout = '', stderr = '';
+    child.stdout.on('data', d => stdout += d.toString());
+    child.stderr.on('data', d => stderr += d.toString());
+    child.stdin.end();
+    const timer = setTimeout(() => { child.kill(); resolve({ content: stdout || stderr || '' }); }, 300000);
+    child.on('close', () => {
+      clearTimeout(timer);
+      const sid = stdout.match(/(ses_[a-zA-Z0-9]+)/);
+      resolve({ content: stdout || stderr || '', sessionId: sid ? sid[1] : sessionId });
+    });
+    child.on('error', () => { clearTimeout(timer); resolve({ content: '', sessionId, error: 'OpenCode process failed' }); });
   });
 }
 
@@ -225,8 +249,12 @@ const server = http.createServer(async (req, res) => {
         }
 
         if (engine === 'opencode') {
-          const r = await proxyChat(OPENCODE.host, OPENCODE.port, null, { model: model || 'deepseek-v4-flash-free', messages });
-          return send({ ...r, engine: 'opencode' });
+          const lastUserMsg = [...messages].reverse().find(m => m.role === 'user');
+          const msg = systemPrompt
+            ? `${systemPrompt}\n\n${lastUserMsg?.content || ''}`
+            : (lastUserMsg?.content || '');
+          const r = await opencodeRun(msg);
+          return send({ content: r.content, engine: 'opencode', sessionId: r.sessionId });
         }
 
         // Default: 9router

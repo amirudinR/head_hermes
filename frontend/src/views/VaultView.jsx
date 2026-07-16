@@ -2,7 +2,7 @@ import React from 'react';
 import { useApp } from '../context/AppContext';
 
 function VaultView() {
-  const { providers } = useApp();
+  const { providers, models } = useApp();
 
   return (
     <div className="max-w-3xl mx-auto w-full">
@@ -11,7 +11,6 @@ function VaultView() {
         <p className="text-sm text-on-surface-variant mt-1">Provider credentials dari OpenCode & Hermes</p>
       </div>
 
-      {/* OpenCode Providers */}
       <div className="mb-6">
         <h3 className="text-xs uppercase tracking-wider text-on-surface-variant/60 font-medium mb-3">OpenCode Providers</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -47,7 +46,24 @@ function VaultView() {
         </div>
       </div>
 
-      {/* Info */}
+      {models.length > 0 && (
+        <div className="mb-6">
+          <h3 className="text-xs uppercase tracking-wider text-on-surface-variant/60 font-medium mb-3">Available Models</h3>
+          <div className="flex flex-wrap gap-2">
+            {models.slice(0, 30).map(m => (
+              <span key={m.id} className="px-2.5 py-1 rounded-lg bg-surface-container-high/60 border border-white/5 text-[11px] text-on-surface-variant font-mono">
+                {m.label || m.id}
+              </span>
+            ))}
+            {models.length > 30 && (
+              <span className="px-2.5 py-1 rounded-lg bg-surface-container-high/60 border border-white/5 text-[11px] text-on-surface-variant/50">
+                +{models.length - 30} more
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
       <div className="p-5 bg-surface-container/40 border border-white/5 rounded-2xl text-center text-on-surface-variant text-sm">
         <p className="opacity-60">API keys dikelola oleh OpenCode dan Hermes secara lokal.</p>
         <p className="opacity-40 text-xs mt-1">Gunakan <code className="text-primary-fixed-dim">opencode providers</code> atau <code className="text-primary-fixed-dim">hermes auth</code> di terminal untuk manage.</p>

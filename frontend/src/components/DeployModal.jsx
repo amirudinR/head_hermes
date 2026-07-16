@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 
 function DeployModal() {
-  const { deployAgent, setDeployModalOpen, agents } = useApp();
+  const { deployAgent, setDeployModalOpen, agents, providers, models } = useApp();
   const [name, setName] = useState('');
   const [engine, setEngine] = useState('opencode');
+  const [selectedProvider, setSelectedProvider] = useState('opencode');
+  const [selectedModel, setSelectedModel] = useState('deepseek-v4-flash-free');
 
   const workerCount = agents.filter(a => a.role === 'worker' && !a.closed).length;
   const slotsLeft = 7 - workerCount;
+  const filteredModels = selectedProvider === '9router' ? models : models;
 
   const handleDeploy = () => {
     if (!name.trim()) return;
     if (slotsLeft <= 0) return;
-    deployAgent(name.trim(), engine, 'opencode', 'deepseek-v4-flash-free');
+    deployAgent(name.trim(), engine, selectedProvider, selectedModel);
   };
 
   return (
@@ -63,6 +66,34 @@ function DeployModal() {
                 ⚡ Hermes
               </button>
             </div>
+          </div>
+          <div>
+            <label className="text-xs text-on-surface-variant mb-1.5 block font-medium uppercase tracking-wider">Provider</label>
+            <select
+              value={selectedProvider}
+              onChange={e => setSelectedProvider(e.target.value)}
+              className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface text-sm focus:outline-none focus:border-primary-container/50 transition-all appearance-none"
+            >
+              <option value="opencode">OpenCode</option>
+              {providers.map(p => (
+                <option key={p.id} value={p.id}>{p.label}</option>
+              ))}
+              <option value="9router">9router</option>
+            </select>
+          </div>
+          <div>
+            <label className="text-xs text-on-surface-variant mb-1.5 block font-medium uppercase tracking-wider">Model</label>
+            <select
+              value={selectedModel}
+              onChange={e => setSelectedModel(e.target.value)}
+              className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface text-sm focus:outline-none focus:border-primary-container/50 transition-all appearance-none"
+            >
+              <option value="deepseek-v4-flash-free">DeepSeek V4 Flash (Free)</option>
+              <option value="mimo-v2.5-free">MiMo V2.5 (Free)</option>
+              {filteredModels.map(m => (
+                <option key={m.id} value={m.id}>{m.label || m.id}</option>
+              ))}
+            </select>
           </div>
         </div>
 

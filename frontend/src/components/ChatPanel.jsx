@@ -1,14 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
 
 function ChatPanel({ agent }) {
   const { sendMessage } = useApp();
   const [input, setInput] = useState('');
   const bodyRef = useRef(null);
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
   }, [agent.messages, agent.thinking]);
+
+  const autoResize = useCallback(() => {
+    const ta = textareaRef.current;
+    if (ta) {
+      ta.style.height = 'auto';
+      ta.style.height = Math.min(ta.scrollHeight, 120) + 'px';
+    }
+  }, []);
+
+  useEffect(() => { autoResize(); }, [input, autoResize]);
 
   const handleSend = () => {
     if (!input.trim()) return;
@@ -62,17 +73,21 @@ function ChatPanel({ agent }) {
       </div>
 
       <div className="p-4 border-t border-white/5 bg-surface-container-lowest/30 shrink-0">
-        <div className="flex items-center bg-surface-container/50 rounded-2xl border border-white/5 focus-within:border-primary-container/30 transition-all px-2">
-          <input
-            className="w-full bg-transparent border-none text-on-surface font-body-sm focus:ring-0 placeholder-on-surface-variant/40 py-3.5 px-4 outline-none"
+        <div className="flex items-end bg-surface-container/50 rounded-2xl border border-white/5 focus-within:border-primary-container/30 transition-all px-2">
+          <textarea
+            ref={textareaRef}
+            className="w-full bg-transparent border-none text-on-surface font-body-sm focus:ring-0 placeholder-on-surface-variant/40 py-3 px-4 outline-none resize-none"
             placeholder={`Type a command to ${agent.name}...`}
-            type="text" value={input}
+            value={input}
             onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSend()}
+            onKeyDown={e => {
+              if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+            }}
             disabled={agent.thinking}
+            rows={1}
           />
           <button
-            className="p-2 mr-1 text-on-surface-variant hover:text-primary-fixed-dim bg-white/5 hover:bg-white/10 rounded-xl transition-all disabled:opacity-40"
+            className="p-2 mb-1.5 mr-1 text-on-surface-variant hover:text-primary-fixed-dim bg-white/5 hover:bg-white/10 rounded-xl transition-all disabled:opacity-40"
             onClick={handleSend}
             disabled={!input.trim() || agent.thinking}
           >

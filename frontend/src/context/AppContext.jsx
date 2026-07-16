@@ -18,6 +18,14 @@ function saveState(agents) {
   } catch (_) {}
 }
 
+function calcNextCounter(agents) {
+  const nums = agents.map(a => {
+    const n = parseInt(a.id.replace('hermes-', '').replace('-', ''), 10);
+    return isNaN(n) ? 0 : n;
+  });
+  return Math.max(...nums, 6) + 1;
+}
+
 const DEFAULT_AGENTS = [
   {
     id: 'hermes-overseer',
@@ -108,14 +116,15 @@ const DEFAULT_AGENTS = [
 
 export function AppProvider({ children }) {
   const saved = loadState();
-  const [agents, setAgents] = useState(saved || DEFAULT_AGENTS);
+  const initialAgents = saved || DEFAULT_AGENTS;
+  const [agents, setAgents] = useState(initialAgents);
   const [currentView, setCurrentView] = useState('command');
   const [providers, setProviders] = useState([]);
   const [models, setModels] = useState([]);
   const [health, setHealth] = useState(null);
   const [systemInfo, setSystemInfo] = useState(null);
   const [deployModalOpen, setDeployModalOpen] = useState(false);
-  const [agentCounter, setAgentCounter] = useState(7);
+  const [agentCounter, setAgentCounter] = useState(() => calcNextCounter(initialAgents));
   const [contextMenu, setContextMenu] = useState(null);
 
   useEffect(() => { saveState(agents); }, [agents]);
@@ -193,14 +202,15 @@ export function AppProvider({ children }) {
     updateAgent(agentId, { messages: updatedMessages, thinking: true });
 
     try {
+      const msgs = updatedMessages.map(m => ({ role: m.role, content: m.content }));
+      if (systemPrompt || agent.systemPrompt) {
+        msgs.unshift({ role: 'system', content: systemPrompt || agent.systemPrompt });
+      }
       const body = {
         engine: agent.engine,
         model: agent.model,
-        messages: updatedMessages.filter(m => m.role !== 'system').map(m => ({ role: m.role, content: m.content })),
+        messages: msgs,
       };
-      if (systemPrompt || agent.systemPrompt) {
-        body.systemPrompt = systemPrompt || agent.systemPrompt;
-      }
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -32,7 +32,7 @@ const DEFAULT_AGENTS = [
     name: 'Overseer',
     badge: 'OVERSEER',
     role: 'overseer',
-    engine: 'hermes',
+    engine: 'opencode',
     provider: 'opencode',
     model: 'deepseek-v4-flash-free',
     status: 'online',
@@ -46,7 +46,7 @@ const DEFAULT_AGENTS = [
     name: 'Distributor',
     badge: 'DISTRIBUTOR',
     role: 'distributor',
-    engine: 'hermes',
+    engine: 'opencode',
     provider: 'opencode',
     model: 'deepseek-v4-flash-free',
     status: 'online',
@@ -60,7 +60,7 @@ const DEFAULT_AGENTS = [
     name: 'Archivist',
     badge: 'MD',
     role: 'archivist',
-    engine: 'hermes',
+    engine: 'opencode',
     provider: 'opencode',
     model: 'deepseek-v4-flash-free',
     status: 'online',
@@ -74,7 +74,7 @@ const DEFAULT_AGENTS = [
     name: 'Watcher',
     badge: 'WATCHER',
     role: 'watcher',
-    engine: 'hermes',
+    engine: 'opencode',
     provider: 'opencode',
     model: 'deepseek-v4-flash-free',
     status: 'online',
@@ -88,7 +88,7 @@ const DEFAULT_AGENTS = [
     name: 'Hermes-01',
     badge: 'WORKER',
     role: 'worker',
-    engine: 'hermes',
+    engine: 'opencode',
     provider: 'opencode',
     model: 'deepseek-v4-flash-free',
     status: 'online',
@@ -118,7 +118,7 @@ const DEFAULT_AGENTS = [
     name: 'Hermes-X',
     badge: 'WORKER',
     role: 'worker',
-    engine: 'hermes',
+    engine: 'opencode',
     provider: 'opencode',
     model: 'deepseek-v4-flash-free',
     status: 'offline',
@@ -182,7 +182,6 @@ export function AppProvider({ children }) {
   const updateAgent = (id, patch) => setAgents(a => a.map(ag => ag.id === id ? { ...ag, ...patch } : ag));
 
   const minimizeAgent = (id) => updateAgent(id, { minimized: true });
-  const maximizeAgent = (id) => updateAgent(id, { maximized: !agents.find(a => a.id === id)?.maximized });
   const closeAgent = (id) => updateAgent(id, { closed: true });
   const restoreAgent = (id) => updateAgent(id, { minimized: false, closed: false });
 
@@ -258,7 +257,7 @@ export function AppProvider({ children }) {
       deployModalOpen, setDeployModalOpen,
       contextMenu, setContextMenu,
       sidebarOpen, setSidebarOpen, toggleSidebar: () => setSidebarOpen(s => !s),
-      minimizeAgent, maximizeAgent, closeAgent, restoreAgent,
+      minimizeAgent, closeAgent, restoreAgent,
       restartAgent, deployAgent, sendMessage,
       fetchProviders, fetchHealth, fetchSystem,
     }}>
@@ -267,4 +266,8 @@ export function AppProvider({ children }) {
   );
 }
 
-export const useApp = () => useContext(AppContext);
+export const useApp = () => {
+  const ctx = useContext(AppContext);
+  if (!ctx) throw new Error('useApp must be used within AppProvider');
+  return ctx;
+};

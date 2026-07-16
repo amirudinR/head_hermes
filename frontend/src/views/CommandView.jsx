@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import AgentCard from '../components/AgentCard';
+import { createDraggable, utils } from 'animejs';
 
 const SPECIAL_ORDER = ['hermes-overseer', 'hermes-distributor', 'hermes-md', 'hermes-watcher'];
 
@@ -10,6 +11,10 @@ function CommandView() {
   const specialAgents = SPECIAL_ORDER.map(id => agents.find(a => a.id === id)).filter(Boolean);
   const workers = agents.filter(a => a.role === 'worker' && !a.closed);
   const workerCount = workers.length;
+
+  useEffect(() => {
+    createDraggable('[data-draggable-target]');
+  }, [specialAgents.length, workerCount]);
 
   return (
     <div className="relative w-full h-full overflow-auto custom-scroll">
@@ -24,9 +29,9 @@ function CommandView() {
       ) : (
         <div className="p-4 md:p-6 flex flex-col gap-6 min-h-full">
           {/* Special Agents Row */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
             {specialAgents.map(agent => (
-              <div key={agent.id}>
+              <div key={agent.id} className="h-fit self-start">
                 <AgentCard agent={agent} />
               </div>
             ))}
@@ -41,16 +46,16 @@ function CommandView() {
                   <span className="text-[10px] bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full">{workerCount}/7</span>
                 </div>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
                 {workers.map(agent => (
-                  <div key={agent.id}>
+                  <div key={agent.id} className="h-fit self-start">
                     <AgentCard agent={agent} />
                   </div>
                 ))}
                 {workerCount < 7 && (
                   <button
                     onClick={() => setDeployModalOpen(true)}
-                    className="h-[420px] rounded-3xl border-2 border-dashed border-white/10 hover:border-primary-container/30 bg-surface-container/20 hover:bg-surface-container/40 transition-all flex flex-col items-center justify-center gap-2 text-on-surface-variant/50 hover:text-primary-fixed-dim group"
+                    className="h-[200px] rounded-3xl border-2 border-dashed border-white/10 hover:border-primary-container/30 bg-surface-container/20 hover:bg-surface-container/40 transition-all flex flex-col items-center justify-center gap-2 text-on-surface-variant/50 hover:text-primary-fixed-dim group"
                   >
                     <span className="material-symbols-outlined text-[36px] font-light group-hover:scale-110 transition-transform">add</span>
                     <span className="text-sm font-medium">Deploy Worker</span>

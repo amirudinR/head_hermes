@@ -26,7 +26,7 @@ function VaultView() {
                 p.status === 'active' ? 'bg-primary-container/20 text-primary-fixed-dim' : 'bg-surface-container-high text-on-surface-variant/40'
               }`}>
                 <span className="material-symbols-outlined text-[20px] font-light">
-                  {p.type === 'oauth' ? 'oauth' : 'key'}
+                  {p.type === 'oauth' ? 'key' : 'key'}
                 </span>
               </div>
               <div className="flex-1 min-w-0">

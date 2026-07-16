@@ -17,9 +17,9 @@ function Sidebar() {
 
   return (
     <>
-      <nav className={`fixed top-0 left-0 h-full z-40 pt-12 pb-6 flex flex-col bg-surface-container-lowest/30 backdrop-blur-2xl border-r border-white/5 w-[260px] transition-transform duration-300 ease-out ${
+      <nav className={`fixed top-0 left-0 h-full z-40 pt-12 pb-4 flex flex-col bg-surface-container-lowest/30 backdrop-blur-2xl border-r border-white/5 w-[260px] transition-transform duration-300 ease-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } md:relative md:z-auto ${
+      } ${
         sidebarOpen ? 'md:translate-x-0' : 'md:-translate-x-full'
       }`}>
         <div className="px-6 mb-12">

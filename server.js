@@ -119,9 +119,8 @@ function findHermesExe() {
 function hermesChat(msg, sessionId) {
   return new Promise(resolve => {
     const hermesExe = findHermesExe();
-    const args = sessionId
-      ? ['-z', msg, '-r', sessionId, '-Q']
-      : ['-z', msg, '-Q'];
+    const args = ['chat', '-q', msg, '-Q'];
+    if (sessionId) args.push('--resume', sessionId);
     const child = spawn(hermesExe, args, { shell: true, windowsHide: true, timeout: 180000 });
     let stdout = '', stderr = '';
     child.stdout.on('data', d => stdout += d.toString());
@@ -130,8 +129,9 @@ function hermesChat(msg, sessionId) {
     const timer = setTimeout(() => { child.kill(); resolve({ content: stdout || stderr || '', sessionId }); }, 180000);
     child.on('close', (code) => {
       clearTimeout(timer);
-      const sid = stdout.match(/([0-9]{8}_[0-9]{6}_[a-f0-9]+)/);
-      resolve({ content: stdout || stderr || '', sessionId: sid ? sid[1] : sessionId });
+      const sid = stdout.match(/session_id:\s*([0-9]{8}_[0-9]{6}_[a-f0-9]+)/);
+      const content = stdout.replace(/session_id:\s*[0-9]{8}_[0-9]{6}_[a-f0-9]+/g, '').trim();
+      resolve({ content: content || stderr.trim() || '', sessionId: sid ? sid[1] : sessionId });
     });
     child.on('error', () => { clearTimeout(timer); resolve({ content: '', sessionId, error: 'Hermes process failed' }); });
   });

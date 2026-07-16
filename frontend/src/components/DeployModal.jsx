@@ -92,7 +92,7 @@ function DeployModal() {
             >
               <option value="deepseek-v4-flash-free">DeepSeek V4 Flash (Free)</option>
               <option value="mimo-v2.5-free">MiMo V2.5 (Free)</option>
-              {filteredModels.map(m => (
+              {(filteredModels ?? []).map(m => (
                 <option key={m.id} value={m.id}>{m.label || m.id}</option>
               ))}
             </select>

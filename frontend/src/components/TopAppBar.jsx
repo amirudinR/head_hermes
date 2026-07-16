@@ -1,0 +1,49 @@
+import React from 'react';
+import { useApp } from '../context/AppContext';
+
+export default function TopAppBar({ mobileOnly }) {
+  const { systemInfo, health } = useApp();
+  const activeCount = health?.services?.filter(s => s.status === 'online').length ?? '--';
+
+  if (mobileOnly) {
+    return (
+      <header style={{
+        position: 'fixed', top: 0, width: '100%', zIndex: 50,
+        height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 16px',
+        background: 'rgba(8, 14, 8, 0.92)', backdropFilter: 'blur(16px)',
+        borderBottom: '1px solid var(--border)',
+      }} className="md:hidden">
+        <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--text)' }}>Ternak Hermes</div>
+      </header>
+    );
+  }
+
+  const items = [
+    { icon: 'electric_bolt', label: 'Services', value: activeCount },
+    { icon: 'memory',        label: 'CPU',      value: `${systemInfo?.cpuUsage ?? '--'}%` },
+    { icon: 'storage',       label: 'RAM',      value: `${systemInfo?.memPercent ?? '--'}%` },
+  ];
+
+  return (
+    <div style={{
+      height: 44, flexShrink: 0,
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '0 28px',
+      background: 'rgba(8,14,8,0.5)', borderBottom: '1px solid var(--border-subtle)',
+    }} className="hidden md:flex">
+      <div style={{ display: 'flex', gap: 28 }}>
+        {items.map(item => (
+          <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-dim)' }}>
+            <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--clr-primary-lo)' }}>{item.icon}</span>
+            {item.label}: <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>{item.value}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--text-dim)' }}>
+        <span className="material-symbols-outlined" style={{ fontSize: 14, color: 'var(--clr-primary-lo)' }}>schedule</span>
+        Uptime: <span style={{ color: 'var(--text-muted)', fontWeight: 500 }}>{systemInfo?.uptime ?? '--'}</span>
+      </div>
+    </div>
+  );
+}

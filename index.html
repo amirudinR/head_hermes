@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Head Hermes 🧠</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080c;--bg2:#0e0e14;--bg3:#14141e;--card:#12121c;--card-hover:#1a1a28;--border:#1e1e2e;--border2:#2a2a3c;--text:#e8e6f0;--text2:#8a87a0;--text3:#5a576e;--accent:#6c63ff;--accent2:#8b83ff;--accent-dim:rgba(108,99,255,.12);--green:#22c55e;--green-dim:rgba(34,197,94,.12);--red:#ef4444;--red-dim:rgba(239,68,68,.12);--yellow:#f59e0b;--yellow-dim:rgba(245,158,11,.12);--radius:14px;--radius-sm:10px;--font:'Inter',system-ui,sans-serif;--mono:'JetBrains Mono','SF Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100dvh;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.app{display:flex;min-height:100dvh}
+.sidebar{width:220px;min-width:220px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;transition:transform .3s}
+.sidebar-brand{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:12px}
+.sidebar-brand h1{font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+.sidebar-brand h1 .accent{color:var(--accent)}
+.sidebar-brand p{font-size:11px;color:var(--text3);margin-top:4px}
+.nav-section{padding:8px 12px 4px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;font-weight:500;color:var(--text2);cursor:pointer;transition:all .2s;border-left:2px solid transparent}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:var(--accent-dim)}
+.nav-item .icon{font-size:16px;width:20px;text-align:center}
+.nav-item .badge{margin-left:auto;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;background:var(--accent-dim);color:var(--accent)}
+.main{flex:1;margin-left:220px;padding:24px 32px;max-width:1200px}
+.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.header-left h2{font-size:20px;font-weight:800}
+.header-left p{font-size:12px;color:var(--text3);margin-top:2px}
+.header-right{display:flex;gap:8px;align-items:center}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 2s ease-in-out infinite;display:inline-block;margin-right:4px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.btn{padding:7px 14px;border-radius:var(--radius-sm);background:var(--card);border:1px solid var(--border);color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:5px;transition:all .2s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);color:#fff}
+.btn-sm{padding:4px 10px;font-size:10px}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;transition:all .3s}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.stat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.stat-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.stat-value{font-size:26px;font-weight:900;font-family:var(--mono);line-height:1}
+.stat-sub{font-size:11px;color:var(--text3);margin-top:4px}
+.progress-bar{width:100%;height:3px;border-radius:2px;background:var(--border);margin-top:8px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px;transition:width .8s ease}
+.progress-fill.green{background:var(--green)}
+.progress-fill.accent{background:var(--accent)}
+.progress-fill.yellow{background:var(--yellow)}
+.progress-fill.red{background:var(--red)}
+.section{margin-bottom:20px}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;transition:all .3s}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.service-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;display:flex;align-items:center;gap:10px;transition:all .3s}
+.service-card:hover{border-color:var(--border2)}
+.service-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.service-dot.online{background:var(--green);box-shadow:0 0 8px rgba(34,197,94,.4)}
+.service-dot.offline{background:var(--red);box-shadow:0 0 8px rgba(239,68,68,.3)}
+.service-dot.timeout{background:var(--yellow);box-shadow:0 0 8px rgba(245,158,11,.3)}
+.service-info{flex:1;min-width:0}
+.service-name{font-size:12px;font-weight:600}
+.service-port{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.service-status{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:50px}
+.service-status.online{background:var(--green-dim);color:var(--green)}
+.service-status.offline{background:var(--red-dim);color:var(--red)}
+.proc-table{width:100%;border-collapse:collapse}
+.proc-table th{text-align:left;padding:8px 12px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--border)}
+.proc-table td{padding:8px 12px;font-size:12px;border-bottom:1px solid rgba(255,255,255,.03)}
+.proc-table tr:hover td{background:rgba(255,255,255,.02)}
+.proc-name{font-weight:600;font-family:var(--mono);font-size:11px}
+.proc-count{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:var(--accent-dim);color:var(--accent);font-size:10px;font-weight:700}
+.proc-mem{font-family:var(--mono);font-size:11px;color:var(--text2)}
+/* Chat Tabs */
+.chat-tab-bar{display:flex;gap:2px;align-items:stretch;overflow-x:auto;flex-shrink:0}
+.chat-tab{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--bg3);border:1px solid var(--border);border-bottom:none;border-radius:8px 8px 0 0;font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;white-space:nowrap;transition:all .2s}
+.chat-tab.active{background:var(--card);color:var(--text);border-color:var(--border2)}
+.chat-tab:hover:not(.active){background:rgba(255,255,255,.03)}
+.chat-tab .close-btn{font-size:14px;color:var(--text3);padding:0 2px;cursor:pointer;border-radius:3px;transition:all .2s}
+.chat-tab .close-btn:hover{color:var(--red);background:rgba(239,68,68,.15)}
+.chat-tab-add{display:flex;align-items:center;justify-content:center;padding:8px 12px;background:transparent;border:1px dashed var(--border2);border-bottom:none;border-radius:8px 8px 0 0;color:var(--text3);font-size:16px;cursor:pointer;transition:all .2s;flex-shrink:0}
+.chat-tab-add:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim)}
+.chat-tab .drag-handle{cursor:grab;opacity:.4;margin-right:2px;font-size:12px;user-select:none;transition:opacity .2s}
+.chat-tab:hover .drag-handle{opacity:.8}
+.chat-tab.dragging{opacity:.4;border-style:dashed;transform:scale(.96)}
+.chat-tab.drag-over{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.chat-window{flex:1;display:flex;flex-direction:column;border:1px solid var(--border2);border-radius:0 8px 8px 8px;background:var(--card);overflow:hidden;margin-top:-1px}
+.chat-header-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg3);border-bottom:1px solid var(--border);flex-shrink:0}
+.chat-model-select{background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--mono);font-size:11px;padding:5px 10px;cursor:pointer;min-width:180px;max-width:300px}
+.chat-model-select:focus{outline:none;border-color:var(--accent)}
+.chat-info{font-size:10px;color:var(--text3);font-family:var(--mono);margin-left:auto}
+.chat-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;min-height:0}
+.chat-body:empty::after{content:'Send a message to start chatting.';color:var(--text3);font-size:13px;text-align:center;padding:40px 20px}
+.chat-bubble{display:flex;gap:10px;max-width:85%;animation:fadeIn .2s ease}
+.chat-bubble.user{align-self:flex-end;flex-direction:row-reverse}
+.chat-bubble.ai{align-self:flex-start}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.chat-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.chat-avatar.user{background:var(--accent-dim);color:var(--accent)}
+.chat-avatar.ai{background:var(--green-dim);color:var(--green)}
+.chat-content{display:flex;flex-direction:column;gap:4px}
+.chat-bubble.user .chat-content{align-items:flex-end}
+.chat-name{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.chat-text{padding:10px 14px;border-radius:12px;font-size:13px;line-height:1.5;word-break:break-word;white-space:pre-wrap}
+.chat-bubble.user .chat-text{background:var(--accent);color:#fff;border-bottom-right-radius:4px}
+.chat-bubble.ai .chat-text{background:var(--bg3);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px}
+.chat-reasoning{padding:8px 12px;background:rgba(108,99,255,.06);border-radius:8px;border-left:2px solid var(--accent);font-size:11px;color:var(--text2);margin:4px 0}
+.chat-reasoning summary{font-size:10px;font-weight:700;color:var(--accent);cursor:pointer}
+.chat-input-row{display:flex;align-items:center;gap:8px;padding:10px 16px;border-top:1px solid var(--border);background:var(--bg3);flex-shrink:0}
+.chat-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font);font-size:13px;padding:8px 4px}
+.chat-input::placeholder{color:var(--text3)}
+.api-flex{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.api-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;display:flex;align-items:flex-start;gap:16px}
+.api-card:hover{border-color:var(--border2)}
+.api-icon{font-size:32px;flex-shrink:0}
+.api-info{flex:1;min-width:0}
+.api-name{font-size:14px;font-weight:700}
+.api-endpoint{font-size:11px;color:var(--text3);font-family:var(--mono);margin-top:2px}
+.api-models{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.model-tag{padding:3px 8px;border-radius:5px;background:var(--accent-dim);color:var(--accent);font-size:10px;font-weight:600;font-family:var(--mono)}
+.api-badge{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 8px;border-radius:50px;flex-shrink:0}
+.api-badge.online{background:var(--green-dim);color:var(--green)}
+.api-badge.offline{background:var(--red-dim);color:var(--red)}
+.terminal-card{background:#0a0a0f;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.terminal-header{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border)}
+.terminal-dots{display:flex;gap:5px}
+.terminal-dots span{width:9px;height:9px;border-radius:50%}
+.terminal-dots span:nth-child(1){background:#ef4444}
+.terminal-dots span:nth-child(2){background:#f59e0b}
+.terminal-dots span:nth-child(3){background:#22c55e}
+.terminal-title{font-size:11px;color:var(--text3);margin-left:6px}
+.terminal-body{padding:14px;font-family:var(--mono);font-size:12px;min-height:180px;max-height:300px;overflow-y:auto;line-height:1.6}
+.terminal-body .line{white-space:pre-wrap;word-break:break-all}
+.terminal-body .prompt{color:var(--accent)}
+.terminal-body .output{color:var(--text2)}
+.terminal-body .error{color:var(--red)}
+.terminal-input-row{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--border);background:rgba(255,255,255,.01)}
+.terminal-input-row .prompt{color:var(--accent);font-family:var(--mono);font-size:12px;font-weight:600}
+.terminal-input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--mono);font-size:12px}
+.file-grid{display:flex;flex-direction:column;gap:2px}
+.file-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:6px;cursor:pointer;transition:all .2s}
+.file-row:hover{background:rgba(255,255,255,.04)}
+.file-icon{font-size:14px;width:18px;text-align:center}
+.file-name{font-size:12px;font-weight:500;flex:1}
+.file-breadcrumb{display:flex;align-items:center;gap:3px;margin-bottom:10px;flex-wrap:wrap}
+.file-breadcrumb span{font-size:11px;color:var(--text3);cursor:pointer;padding:3px 6px;border-radius:4px;transition:all .2s}
+.file-breadcrumb span:hover{background:rgba(255,255,255,.05);color:var(--text)}
+.file-breadcrumb span.current{color:var(--accent);font-weight:600}
+.oc-providers{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.oc-provider{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all .3s}
+.oc-provider:hover{border-color:var(--border2)}
+.oc-provider-icon{font-size:24px;width:36px;text-align:center}
+.oc-provider-info{flex:1}
+.oc-provider-name{font-size:13px;font-weight:600}
+.oc-provider-type{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+.oc-provider-status{font-size:9px;font-weight:700;padding:2px 8px;border-radius:50px}
+.oc-provider-status.active{background:var(--green-dim);color:var(--green)}
+.oc-provider-status.inactive{background:var(--red-dim);color:var(--red)}
+.panel{display:none}
+.panel.active{display:block}
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:14px}
+  .stats-grid,.api-flex{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+  .mobile-toggle{display:flex!important;position:fixed;top:10px;left:10px;z-index:200;width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);color:#fff;font-size:16px;cursor:pointer;align-items:center;justify-content:center}
+}
+.mobile-toggle{display:none}
+</style>
+</head>
+<body>
+<button class="mobile-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
+<div class="app">
+<aside class="sidebar">
+<div class="sidebar-brand"><h1><span class="icon">🧠</span> <span class="accent">Head</span> Hermes</h1><p>Central Command v2.0</p></div>
+<div class="nav-section">Monitor</div>
+<div class="nav-item active" onclick="showPanel('overview',this)"><span class="icon">📊</span> Overview</div>
+<div class="nav-item" onclick="showPanel('services',this)"><span class="icon">🌐</span> Services <span class="badge" id="serviceCount">-</span></div>
+<div class="nav-item" onclick="showPanel('api',this)"><span class="icon">🤖</span> AI APIs</div>
+<div class="nav-item" onclick="showPanel('processes',this)"><span class="icon">⚙️</span> Processes</div>
+<div class="nav-section">AI</div>
+<div class="nav-item" onclick="showPanel('chat',this)"><span class="icon">💬</span> Chat <span class="badge" id="modelCount">-</span></div>
+<div class="nav-item" onclick="showPanel('opencode',this)"><span class="icon">🔑</span> OpenCode</div>
+<div class="nav-section">Tools</div>
+<div class="nav-item" onclick="showPanel('terminal',this)"><span class="icon">💻</span> Terminal</div>
+<div class="nav-item" onclick="showPanel('files',this)"><span class="icon">📁</span> Files</div>
+<div style="flex:1"></div>
+<div style="padding:12px 20px;border-top:1px solid var(--border);font-size:10px;color:var(--text3)">v2.0 • <span id="sidebarTime">--:--</span></div>
+</aside>
+<main class="main">
+<div class="panel active" id="panel-overview">
+<div class="header"><div class="header-left"><h2>Dashboard</h2><p>System overview & real-time monitoring</p></div><div class="header-right"><span class="live-dot"></span><span style="font-size:11px;color:var(--green);font-weight:600">LIVE</span><span class="time-badge" id="clock" style="padding:6px 12px;border-radius:var(--radius-sm);background:var(--card);border:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--text2)">--:--:--</span><button class="btn" onclick="refreshAll()">↻ Refresh</button></div></div>
+<div class="stats-grid" id="statsGrid">
+<div class="stat-card"><div class="stat-header"><span class="stat-label">CPU</span><span class="stat-icon">⚡</span></div><div class="stat-value" id="cpuValue">--</div><div class="stat-sub" id="cpuSub">--</div><div class="progress-bar"><div class="progress-fill accent" id="cpuBar" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-label">Memory</span><span class="stat-icon">🧠</span></div><div class="stat-value" id="memValue">--</div><div class="stat-sub" id="memSub">--</div><div class="progress-bar"><div class="progress-fill green" id="memBar" style="width:0%"></div></div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-label">Uptime</span><span class="stat-icon">⏱️</span></div><div class="stat-value" id="uptimeValue" style="font-size:18px">--</div><div class="stat-sub" id="uptimeSub">--</div></div>
+<div class="stat-card"><div class="stat-header"><span class="stat-label">Hostname</span><span class="stat-icon">🖥️</span></div><div class="stat-value" id="hostValue" style="font-size:14px">--</div><div class="stat-sub" id="hostSub">--</div></div>
+</div>
+<div class="section"><div class="section-title">🌐 Services</div><div class="services-grid" id="servicesQuick"></div></div>
+<div class="section"><div class="section-title">⚙️ Processes</div><div class="card" style="padding:0;overflow-x:auto"><table class="proc-table"><thead><tr><th>Process</th><th>#</th><th>Memory</th><th>PIDs</th></tr></thead><tbody id="procTable"></tbody></table></div></div>
+</div>
+<div class="panel" id="panel-services"><div class="header"><div class="header-left"><h2>Services</h2><p>All monitored ports</p></div><div class="header-right"><button class="btn" onclick="loadServices()">↻ Refresh</button></div></div><div class="services-grid" id="servicesFull"></div></div>
+<div class="panel" id="panel-api">
+<div class="header"><div class="header-left"><h2>AI APIs</h2><p>9router & OpenCode endpoints</p></div><div class="header-right"><button class="btn" onclick="loadAPI()">↻ Refresh</button></div></div>
+<div class="api-flex">
+<div class="api-card"><div class="api-icon">🧠</div><div class="api-info"><div class="api-name">9router Local</div><div class="api-endpoint">127.0.0.1:20128/v1</div><div class="api-models" id="r9Models"></div></div><span id="r9Badge"></span></div>
+<div class="api-card"><div class="api-icon">🔓</div><div class="api-info"><div class="api-name">OpenCode Free</div><div class="api-endpoint">127.0.0.1:3031/v1</div><div class="api-models" id="ocModels"></div></div><span id="ocBadge"></span></div>
+</div>
+</div>
+<div class="panel" id="panel-processes"><div class="header"><div class="header-left"><h2>Processes</h2><p>All running processes</p></div><div class="header-right"><button class="btn" onclick="loadProcesses()">↻ Refresh</button></div></div><div class="card" style="padding:0;overflow-x:auto"><table class="proc-table"><thead><tr><th>Process</th><th>#</th><th>Memory</th><th>PIDs</th></tr></thead><tbody id="procTableFull"></tbody></table></div></div>
+<div class="panel" id="panel-chat">
+<div class="header"><div class="header-left"><h2>Chat</h2><p>Multi-tab AI chat with all models</p></div><div class="header-right"><button class="btn btn-sm btn-primary" onclick="newChatTab()">+ New Tab</button><button class="btn btn-sm" onclick="clearChat()">🗑️ Clear</button></div></div>
+<div class="chat-tab-bar" id="tabBar"></div>
+<div class="chat-window">
+<div class="chat-header-bar"><span style="font-size:11px;font-weight:600;color:var(--text2);flex-shrink:0">Model:</span><select class="chat-model-select" id="chatModelSelect" onchange="switchChatModel(this.value)"><option>Loading...</option></select><span class="chat-info" id="chatInfo">-</span></div>
+<div class="chat-body" id="chatBody"></div>
+<div class="chat-input-row"><input class="chat-input" id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}"><button class="btn btn-primary btn-sm" onclick="sendChat()" style="padding:7px 18px">Send</button></div>
+</div>
+</div>
+<div class="panel" id="panel-opencode">
+<div class="header"><div class="header-left"><h2>OpenCode</h2><p>Providers & accounts</p></div><div class="header-right"><button class="btn" onclick="loadOpenCode()">↻ Refresh</button></div></div>
+<div class="card"><div style="display:flex;align-items:center;gap:14px;margin-bottom:16px"><span style="font-size:36px">🔓</span><div><div style="font-size:14px;font-weight:700">OpenCode Server</div><div style="font-size:11px;color:var(--text3);font-family:var(--mono)">127.0.0.1:3031</div></div><span id="ocServerBadge" class="api-badge online">ONLINE</span></div><div class="section-title">🔑 Connected Providers</div><div class="oc-providers" id="ocProviders"><div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Loading...</div></div></div>
+</div>
+<div class="panel" id="panel-terminal">
+<div class="header"><div class="header-left"><h2>Terminal</h2><p>Execute commands</p></div></div>
+<div class="terminal-card"><div class="terminal-header"><div class="terminal-dots"><span></span><span></span><span></span></div><span class="terminal-title">head-hermes@windows ~</span></div><div class="terminal-body" id="termBody"><div class="line output">🧠 Head Hermes Terminal v2.0</div><div class="line output">Type a command and press Enter.</div></div><div class="terminal-input-row"><span class="prompt">❯</span><input class="terminal-input" id="termInput" placeholder="Type command..." onkeydown="if(event.key==='Enter')runCmd()"></div></div>
+</div>
+<div class="panel" id="panel-files">
+<div class="header"><div class="header-left"><h2>Files</h2><p>Browse workspace</p></div><div class="header-right"><button class="btn" onclick="loadFiles(currentPath)">↻ Refresh</button></div></div>
+<div class="card"><div class="file-breadcrumb" id="breadcrumb"></div><div class="file-grid" id="fileGrid"></div></div>
+</div>
+</main>
+</div>
+<script>
+let currentPath='D:/tuyul',cmdHistory=[],cmdIdx=-1,tabs=[],activeTab=0,tabCounter=0,allModels=[],chatModel='oc/deepseek-v4-flash-free',dragIdx=null,currentFiles=[];
+function showPanel(id,el){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');if(el)el.classList.add('active');document.querySelector('.sidebar')?.classList.remove('open')}
+function updateClock(){const t=new Date().toLocaleTimeString('en-US',{hour12:false});document.getElementById('clock').textContent=t;document.getElementById('sidebarTime').textContent=t}
+setInterval(updateClock,1000);updateClock();
+function api(e){return fetch(e).then(r=>r.json()).catch(()=>null)}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function fmtMem(b){const g=b/(1024**3);return g>=1?g.toFixed(1)+' GB':(b/(1024**2)).toFixed(0)+' MB'}
+function pctColor(p){return p>85?'red':p>60?'yellow':'green'}
+async function loadSystem(){const d=await api('/api/system');if(!d)return;document.getElementById('cpuValue').textContent=d.cpuUsage+'%';document.getElementById('cpuSub').textContent=d.cpuModel+' ('+d.cpuCores+' cores)';document.getElementById('cpuBar').style.width=d.cpuUsage+'%';document.getElementById('cpuBar').className='progress-fill '+pctColor(d.cpuUsage);document.getElementById('memValue').textContent=d.memPercent+'%';document.getElementById('memSub').textContent=fmtMem(d.usedMem)+' / '+fmtMem(d.totalMem);document.getElementById('memBar').style.width=d.memPercent+'%';document.getElementById('memBar').className='progress-fill '+pctColor(d.memPercent);document.getElementById('uptimeValue').textContent=d.uptime;document.getElementById('uptimeSub').textContent='Node '+d.nodeVersion;document.getElementById('hostValue').textContent=d.hostname;document.getElementById('hostSub').textContent=d.platform}
+const KNOWN_PORTS=[{port:3035,name:'Head Hermes',emoji:'🧠'},{port:3031,name:'OpenCode',emoji:'🔓'},{port:4567,name:'Kehidupan API',emoji:'💬'},{port:5050,name:'Kehidupan UI',emoji:'🎭'},{port:5052,name:'Find Love',emoji:'💖'},{port:9876,name:'API Health',emoji:'🏥'},{port:20128,name:'9router',emoji:'🤖'}];
+function renderServices(id,services){const el=document.getElementById(id);let on=0;el.innerHTML=KNOWN_PORTS.map(kp=>{const s=services?.find(s=>s.port===kp.port);const st=s?s.status:'offline';if(st==='online')on++;return '<div class="service-card"><div class="service-dot '+st+'"></div><div class="service-info"><div class="service-name">'+kp.emoji+' '+kp.name+'</div><div class="service-port">:'+kp.port+'</div></div><span class="service-status '+st+'">'+st+'</span></div>'}).join('');document.getElementById('serviceCount').textContent=on+'/'+KNOWN_PORTS.length}
+async function loadServices(){const d=await api('/api/health');if(!d)return;renderServices('servicesQuick',d.services);renderServices('servicesFull',d.services)}
+async function loadAPI(){const d=await api('/api/health');if(!d)return;const r9=d['9router'],oc=d.opencode;if(r9){document.getElementById('r9Badge').innerHTML='<span class="api-badge '+r9.status+'">'+r9.status+'</span>';document.getElementById('r9Models').innerHTML=(r9.models||[]).slice(0,20).map(m=>'<span class="model-tag">'+esc(m)+'</span>').join('')+(r9.models?.length>20?'<br><span style="font-size:10px;color:var(--text3)">+'+(r9.models.length-20)+' more</span>':'')}if(oc){document.getElementById('ocBadge').innerHTML='<span class="api-badge '+oc.status+'">'+oc.status+'</span>';document.getElementById('ocModels').innerHTML=(oc.models||[]).slice(0,20).map(m=>'<span class="model-tag">'+esc(m)+'</span>').join('')+(oc.models?.length>20?'<br><span style="font-size:10px;color:var(--text3)">+'+(oc.models.length-20)+' more</span>':'')}allModels=[];if(r9?.models)allModels.push(...r9.models.map(m=>({id:m,src:'9router'})));if(oc?.models)allModels.push(...oc.models.map(m=>({id:m,src:'opencode'})));updateModelSelector();document.getElementById('modelCount').textContent=allModels.length}
+function updateModelSelector(){const sel=document.getElementById('chatModelSelect');const srcMap={'9router':'🧠','opencode':'🔓','other':'🤖'};const groups={};allModels.forEach(m=>{const prov=m.id.includes('/')?m.id.split('/')[0]:'other';const prefix=srcMap[m.src]||'🤖';if(!groups[prov])groups[prov]=[];groups[prov].push({...m,display:prefix+' '+m.id})});let html='<option value="">— Select model —</option>';Object.entries(groups).sort().forEach(([prov,models])=>{html+='<optgroup label="'+prov+'">';models.forEach(m=>{const sel2=m.id===chatModel?'selected':'';html+='<option value="'+m.id+'" '+sel2+'>'+m.display+'</option>'});html+='</optgroup>'});sel.innerHTML=html}
+function switchChatModel(val){if(!val)return;chatModel=val;if(tabs[activeTab])tabs[activeTab].model=val;document.getElementById('chatInfo').textContent='Model: '+val.split('/').pop()}
+async function loadProcesses(){const d=await api('/api/processes');if(!d)return;const sorted=d.sort((a,b)=>b.count-a.count).slice(0,15);const html=sorted.map(p=>'<tr><td><span class="proc-name">'+esc(p.name)+'</span></td><td><span class="proc-count">'+p.count+'</span></td><td><span class="proc-mem">'+p.mem+'</span></td><td><span class="proc-mem" style="font-size:10px">'+p.pids.slice(0,3).join(', ')+(p.pids.length>3?'...':'')+'</span></td></tr>').join('');document.getElementById('procTable').innerHTML=html;document.getElementById('procTableFull').innerHTML=html}
+function saveTabs(){try{localStorage.setItem('hh-chat-tabs',JSON.stringify(tabs))}catch(e){}}
+function loadTabs(){try{const d=localStorage.getItem('hh-chat-tabs');if(d){tabs=JSON.parse(d);if(tabs.length===0)initDefaultTab();}else initDefaultTab();}catch(e){initDefaultTab();}renderTabs();renderChat()}
+function initDefaultTab(){tabs=[{id:++tabCounter,name:'Chat 1',model:chatModel,messages:[],timestamp:Date.now()}];activeTab=0;saveTabs()}
+function renderTabs(){const bar=document.getElementById('tabBar');bar.innerHTML=tabs.map((t,i)=>'<div class="chat-tab '+(i===activeTab?'active':'')+'" onclick="switchTab('+i+')" draggable="true" ondragstart="dragStart(event,'+i+')" ondragover="dragOver(event)" ondrop="dragDrop(event,'+i+')" ondragend="dragEnd(event)"><span class="drag-handle">⠿</span>💬 '+esc(t.name)+'<span class="close-btn" onclick="event.stopPropagation();closeTab('+i+')">×</span></div>').join('')+'<div class="chat-tab-add" onclick="newChatTab()" title="New chat">+</div>'}
+function dragStart(e,i){dragIdx=i;e.target.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',i)}
+function dragOver(e){e.preventDefault();e.dataTransfer.dropEffect='move';const tab=e.target.closest('.chat-tab');if(tab)tab.classList.add('drag-over')}
+function dragDrop(e,i){e.preventDefault();const from=dragIdx;if(from===null||from===i)return;const item=tabs.splice(from,1)[0];tabs.splice(i,0,item);if(activeTab===from)activeTab=i;else if(from<activeTab&&i>=activeTab)activeTab--;else if(from>activeTab&&i<=activeTab)activeTab++;dragIdx=null;saveTabs();renderTabs()}
+function dragEnd(e){dragIdx=null;document.querySelectorAll('.chat-tab').forEach(t=>{t.classList.remove('dragging','drag-over')})}
+function switchTab(i){if(i===activeTab)return;const body=document.getElementById('chatBody');if(tabs[activeTab])tabs[activeTab].messages=collectMessages(body);activeTab=i;if(tabs[i]){chatModel=tabs[i].model||chatModel;const sel=document.getElementById('chatModelSelect');if(sel)sel.value=chatModel}renderTabs();renderChat()}
+function collectMessages(body){const msgs=[];body.querySelectorAll('.chat-bubble').forEach(el=>{const isUser=el.classList.contains('user');const textEl=el.querySelector('.chat-text');if(textEl)msgs.push({role:isUser?'user':'assistant',content:textEl.textContent})});return msgs}
+function newChatTab(){tabs.push({id:++tabCounter,name:'Chat '+(tabs.length+1),model:chatModel,messages:[],timestamp:Date.now()});activeTab=tabs.length-1;renderTabs();document.getElementById('chatBody').innerHTML='';renderChat();saveTabs()}
+function closeTab(i){if(tabs.length<=1)return;tabs.splice(i,1);if(activeTab>=tabs.length)activeTab=tabs.length-1;renderTabs();renderChat();saveTabs()}
+function clearChat(){tabs.forEach(t=>t.messages=[]);renderChat();saveTabs()}
+function renderChat(){const body=document.getElementById('chatBody');body.innerHTML='';if(!tabs[activeTab])return;(tabs[activeTab].messages||[]).forEach(msg=>{const isUser=msg.role==='user';const div=document.createElement('div');div.className='chat-bubble '+(isUser?'user':'ai');div.innerHTML='<div class="chat-avatar '+(isUser?'user':'ai')+'">'+(isUser?'U':'AI')+'</div><div class="chat-content"><div class="chat-name">'+(isUser?'You':'AI')+'</div><div class="chat-text">'+esc(msg.content)+'</div></div>';body.appendChild(div)});body.scrollTop=body.scrollHeight}
+async function sendChat(){const input=document.getElementById('chatInput');const msg=input.value.trim();if(!msg||!chatModel)return;input.value='';const body=document.getElementById('chatBody');const uDiv=document.createElement('div');uDiv.className='chat-bubble user';uDiv.innerHTML='<div class="chat-avatar user">U</div><div class="chat-content"><div class="chat-name">You</div><div class="chat-text">'+esc(msg)+'</div></div>';body.appendChild(uDiv);body.scrollTop=body.scrollHeight;if(!tabs[activeTab])initDefaultTab();tabs[activeTab].messages.push({role:'user',content:msg});const aDiv=document.createElement('div');aDiv.className='chat-bubble ai';const loadId='load-'+Date.now();aDiv.innerHTML='<div class="chat-avatar ai">AI</div><div class="chat-content"><div class="chat-name">AI</div><div class="chat-text" id="'+loadId+'" style="color:var(--text3)">thinking...</div></div>';body.appendChild(aDiv);body.scrollTop=body.scrollHeight;try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:chatModel,messages:tabs[activeTab].messages})});const d=await r.json();const el=document.getElementById(loadId);let reply=d.content||d.error||'No response';reply=reply.replace(/\n?data:\s*\[DONE\]/g,'').trim();if(el){el.textContent=reply;el.style.color=''}if(d.reasoning){const rDiv=document.createElement('div');rDiv.innerHTML='<details class="chat-reasoning"><summary>🧠 Reasoning</summary>'+esc(d.reasoning)+'</details>';aDiv.querySelector('.chat-content').appendChild(rDiv)}tabs[activeTab].messages.push({role:'assistant',content:reply});document.getElementById('chatInfo').textContent=(d.usage?d.usage.total_tokens+' tokens | ':'')+'Model: '+chatModel.split('/').pop();body.scrollTop=body.scrollHeight;saveTabs()}catch(e){const el=document.getElementById(loadId);if(el){el.textContent='Error: '+e.message;el.style.color='var(--red)'}}}
+async function loadOpenCode(){const el=document.getElementById('ocProviders');try{const d=await api('/api/health');const oc=d?.opencode;if(oc){document.getElementById('ocServerBadge').textContent=oc.status.toUpperCase();document.getElementById('ocServerBadge').className='api-badge '+oc.status}if(!oc||oc.status==='offline'){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">🔴 OpenCode offline. Run <code style="background:var(--bg3);padding:2px 4px;border-radius:4px">opencode serve --port 3031</code></div>';return}}catch(e){}try{const r=await fetch('/api/opencode/providers');const p=await r.json();if(!p||p.length===0){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">No providers found.</div>';return}const icons={anthropic:'🧠',openai:'🔵',zai:'🟣',minimax:'🟢','github-copilot':'🐙',google:'🔴',deepseek:'🟡'};el.innerHTML=p.map(p=>'<div class="oc-provider"><div class="oc-provider-icon">'+(icons[p.name?.toLowerCase()]||'🔑')+'</div><div class="oc-provider-info"><div class="oc-provider-name">'+esc(p.name||p.provider||'Unknown')+'</div><div class="oc-provider-type">'+(p.type||'api')+'</div></div><span class="oc-provider-status '+(p.status||'active')+'">'+(p.status||'active')+'</span></div>').join('')}catch(e){el.innerHTML='<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Unable to load providers.</div>'}}
+async function runCmd(){const input=document.getElementById('termInput');const cmd=input.value.trim();if(!cmd)return;input.value='';cmdHistory.unshift(cmd);cmdIdx=-1;const body=document.getElementById('termBody');body.innerHTML+='<div class="line prompt">❯ '+esc(cmd)+'</div>';if(cmd==='clear'){body.innerHTML='';return}body.innerHTML+='<div class="line output" style="opacity:.5">Running...</div>';body.scrollTop=body.scrollHeight;const d=await api('/api/exec?cmd='+encodeURIComponent(cmd));body.querySelectorAll('.line').forEach(l=>{if(l.textContent==='Running...')l.remove()});if(d){if(d.output)d.output.split('\n').forEach(l=>body.innerHTML+='<div class="line output">'+esc(l)+'</div>');if(d.error)body.innerHTML+='<div class="line error">Error: '+esc(d.error)+'</div>'}body.scrollTop=body.scrollHeight}
+document.getElementById('termInput')?.addEventListener('keydown',e=>{if(e.key==='ArrowUp'){e.preventDefault();if(cmdIdx<cmdHistory.length-1){cmdIdx++;e.target.value=cmdHistory[cmdIdx]}}if(e.key==='ArrowDown'){e.preventDefault();if(cmdIdx>0){cmdIdx--;e.target.value=cmdHistory[cmdIdx]}else{cmdIdx=-1;e.target.value=''}}})
+function updateBreadcrumb(p){const parts=p.replace(/\\/g,'/').split('/').filter(Boolean);const el=document.getElementById('breadcrumb');el.innerHTML=parts.map((part,i)=>{const fp=parts.slice(0,i+1).join('/');return '<span onclick="loadFiles(\''+fp.replace(/'/g,"\\'")+'\')"'+(i===parts.length-1?' class="current"':'')+'>'+(i===0?fp+'/':part)+'</span>'}).join('<span style="color:var(--text3)">›</span>')}
+async function loadFiles(dir){currentPath=dir||'D:/tuyul';const d=await api('/api/dir?path='+encodeURIComponent(currentPath));if(!d)return;updateBreadcrumb(d.path);currentFiles=d.items;const grid=document.getElementById('fileGrid');if(d.items.length===0){grid.innerHTML='<div style="padding:40px;text-align:center;color:var(--text3);font-size:13px">Empty directory</div>';return}grid.innerHTML=d.items.map(i=>'<div class="file-row"'+(i.isDir?' onclick="loadFiles(\''+i.path.replace(/'/g,"\\'")+'\')"':'')+'><span class="file-icon">'+(i.isDir?'📁':'📄')+'</span><span class="file-name">'+esc(i.name)+'</span></div>').join('')}
+async function refreshAll(){await Promise.all([loadSystem(),loadServices(),loadProcesses()])}
+setInterval(()=>loadSystem(),10000);setInterval(()=>loadServices(),15000);
+(async function init(){await Promise.all([refreshAll(),loadAPI(),loadOpenCode()]);loadTabs();loadFiles('D:/tuyul');try{const m=localStorage.getItem('hh-last-model');if(m&&allModels.some(mm=>mm.id===m)){chatModel=m;document.getElementById('chatModelSelect').value=m}}catch(e){}document.getElementById('chatModelSelect').value=chatModel;document.getElementById('chatInfo').textContent='Model: '+chatModel.split('/').pop()})();
+</script>
+</body>
+</html>

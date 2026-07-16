@@ -1,0 +1,57 @@
+/* ═══════════════════════════════════════════════════════
+   HERMES THEME — Single source of truth for all colors
+   Edit here to change the entire UI palette
+   ═══════════════════════════════════════════════════════ */
+:root {
+  /* ── Backgrounds ── */
+  --bg:               #112011;
+  --bg-deep:          #0c160c;
+  --bg-soft:          #192819;
+
+  /* ── Surfaces (cards, panels, sidebars) ── */
+  --surface:          rgba(25, 42, 25, 0.80);
+  --surface-high:     rgba(32, 54, 32, 0.88);
+  --surface-low:      rgba(10, 20, 10, 0.88);
+  --surface-error:    rgba(55, 16, 16, 0.72);
+
+  /* ── Borders ── */
+  --border:           rgba(140, 200, 70, 0.14);
+  --border-mid:       rgba(140, 200, 70, 0.22);
+  --border-strong:    rgba(140, 200, 70, 0.34);
+  --border-error:     rgba(220, 90, 90, 0.22);
+  --border-subtle:    rgba(140, 200, 70, 0.07);
+
+  /* ── Text ── */
+  --text:             #dff5c8;   /* Main text — bright off-white/green */
+  --text-muted:       #8eb870;   /* Secondary text */
+  --text-dim:         #506840;   /* Hint / placeholder */
+
+  /* ── Primary accent (Olive-Lime Green) ── */
+  --clr-primary:      #b8e060;   /* Main green accent */
+  --clr-primary-hi:   #d0f07a;   /* Bright highlight */
+  --clr-primary-lo:   #8ab844;   /* Dimmer / icon */
+  --clr-primary-bg:   rgba(140, 200, 60, 0.14);
+  --clr-primary-bg2:  rgba(140, 200, 60, 0.22);
+
+  /* ── Status ── */
+  --clr-online:       #88d050;   /* Online dot */
+  --clr-warning:      #d4bc58;   /* Warning / amber */
+  --clr-error:        #e88080;   /* Error text */
+  --clr-error-bg:     rgba(55, 16, 16, 0.72);
+  --clr-error-border: rgba(220, 90, 90, 0.22);
+
+  /* ── Hover states ── */
+  --hover-green:       rgba(140, 200, 60, 0.09);
+  --hover-green-mid:   rgba(140, 200, 60, 0.18);
+  --hover-error:       rgba(200, 70, 70, 0.09);
+
+  /* ── Glow ── */
+  --glow-online:       0 0 7px rgba(136, 208, 80, 0.55);
+  --glow-primary:      0 0 18px rgba(140, 200, 60, 0.18);
+
+  /* ── Misc ── */
+  --radius:           14px;
+  --radius-sm:        10px;
+  --radius-xs:        7px;
+  --font:             'Inter', system-ui, sans-serif;
+}

@@ -1,5 +1,4 @@
-import React, { useRef, useEffect } from 'react';
-import { createDraggable } from 'animejs';
+import React from 'react';
 import { useApp } from '../context/AppContext';
 import AgentCard from '../components/AgentCard';
 
@@ -7,33 +6,13 @@ const SPECIAL_ORDER = ['hermes-overseer', 'hermes-distributor', 'hermes-md', 'he
 
 function CommandView() {
   const { agents, setDeployModalOpen } = useApp();
-  const canvasRef = useRef(null);
-  const draggableInstances = useRef([]);
 
   const specialAgents = SPECIAL_ORDER.map(id => agents.find(a => a.id === id)).filter(Boolean);
   const workers = agents.filter(a => a.role === 'worker' && !a.closed);
   const workerCount = workers.length;
 
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    const cards = canvasRef.current.querySelectorAll('.draggable-card');
-    const instances = [];
-    cards.forEach((card) => {
-      try {
-        const inst = createDraggable(card, { container: canvasRef.current });
-        instances.push(inst);
-      } catch (e) {
-        // animejs drag failed silently — non-critical
-      }
-    });
-    draggableInstances.current = instances;
-    return () => {
-      instances.forEach(inst => { try { inst?.kill?.(); } catch (_) {} });
-    };
-  }, [specialAgents.length, workerCount]);
-
   return (
-    <div ref={canvasRef} className="relative w-full h-full overflow-auto custom-scroll">
+    <div className="relative w-full h-full overflow-auto custom-scroll">
       {agents.filter(a => !a.closed).length === 0 ? (
         <div className="absolute inset-0 flex items-center justify-center text-on-surface-variant">
           <div className="text-center">
@@ -43,11 +22,11 @@ function CommandView() {
           </div>
         </div>
       ) : (
-        <div className="p-4 flex flex-col gap-4 min-h-full">
+        <div className="p-4 md:p-6 flex flex-col gap-6 min-h-full">
           {/* Special Agents Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-4 gap-6">
             {specialAgents.map(agent => (
-              <div key={agent.id} className="draggable-card cursor-grab active:cursor-grabbing" style={{ touchAction: 'none' }}>
+              <div key={agent.id}>
                 <AgentCard agent={agent} />
               </div>
             ))}
@@ -56,22 +35,22 @@ function CommandView() {
           {/* Workers Section */}
           {workers.length > 0 && (
             <div>
-              <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center justify-between mb-4 mt-2">
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-on-surface-variant uppercase tracking-wider font-medium">Workers</span>
                   <span className="text-[10px] bg-surface-container-high text-on-surface-variant px-2 py-0.5 rounded-full">{workerCount}/7</span>
                 </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                 {workers.map(agent => (
-                  <div key={agent.id} className="draggable-card cursor-grab active:cursor-grabbing" style={{ touchAction: 'none' }}>
+                  <div key={agent.id}>
                     <AgentCard agent={agent} />
                   </div>
                 ))}
                 {workerCount < 7 && (
                   <button
                     onClick={() => setDeployModalOpen(true)}
-                    className="min-h-[160px] rounded-3xl border-2 border-dashed border-white/10 hover:border-primary-container/30 bg-surface-container/20 hover:bg-surface-container/40 transition-all flex flex-col items-center justify-center gap-2 text-on-surface-variant/50 hover:text-primary-fixed-dim group"
+                    className="h-[420px] rounded-3xl border-2 border-dashed border-white/10 hover:border-primary-container/30 bg-surface-container/20 hover:bg-surface-container/40 transition-all flex flex-col items-center justify-center gap-2 text-on-surface-variant/50 hover:text-primary-fixed-dim group"
                   >
                     <span className="material-symbols-outlined text-[36px] font-light group-hover:scale-110 transition-transform">add</span>
                     <span className="text-sm font-medium">Deploy Worker</span>

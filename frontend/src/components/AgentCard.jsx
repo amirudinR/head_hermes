@@ -44,7 +44,7 @@ function AgentCard({ agent }) {
     : agent.status === 'online' ? 'bg-primary-fixed-dim'
     : agent.status === 'connecting' ? 'bg-tertiary-fixed-dim animate-pulse'
     : 'bg-on-surface-variant/40';
-  const isLarge = agent.maximized || agent.role === 'overseer';
+  const isSpecial = ['overseer', 'distributor', 'archivist', 'watcher'].includes(agent.role);
   const engineMeta = ENGINE_META[agent.engine] || ENGINE_META.opencode;
   const engineOptions = ['hermes', 'opencode'];
   const workerCount = agents.filter(a => a.role === 'worker' && !a.closed).length;
@@ -53,31 +53,28 @@ function AgentCard({ agent }) {
     updateAgent(agent.id, { engine: e.target.value });
   };
 
-  const containerClass = isLarge
-    ? `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[400px] max-h-[75vh]'}`
-    : `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'min-h-[320px] max-h-[65vh]'}`;
+  const containerClass = isSpecial
+    ? `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'h-[500px]'}`
+    : `bg-surface-container/40 backdrop-blur-2xl border border-white/5 rounded-3xl flex flex-col shadow-2xl transition-all duration-300 ${agent.minimized ? 'h-14' : 'h-[420px]'}`;
 
   return (
-    <div className={containerClass} style={{ position: 'relative', resize: 'both', overflow: 'hidden', minWidth: isLarge ? '500px' : '300px', width: isLarge ? '640px' : '360px' }}>
-      <div className={`h-14 border-b border-white/5 flex items-center justify-between px-5 drag-handle bg-transparent group shrink-0`}>
-        <div className="flex items-center gap-3 min-w-0">
+    <div className={`${containerClass} w-full min-h-0 min-w-0`} style={{ position: 'relative', overflow: 'hidden' }}>
+      <div className={`h-12 border-b border-white/5 flex items-center justify-between px-4 drag-handle bg-transparent group shrink-0 gap-2`}>
+        <div className="flex items-center gap-2 min-w-0 flex-1">
           <span className={`w-2 h-2 rounded-full ${dotColor} shrink-0`}></span>
-          <h2 className={`font-body-lg font-medium text-on-surface truncate`}>{agent.name}</h2>
+          <h2 className={`font-body-md font-medium text-on-surface truncate`}>{agent.name}</h2>
           {agent.badge && (
-            <span className={`px-2 py-0.5 rounded-md text-[10px] font-medium shrink-0 ${isError ? 'bg-error/10 text-error' : 'bg-surface-variant text-on-surface-variant'}`}>
+            <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold shrink-0 ${engineMeta.bg} ${engineMeta.color}`}>
               {agent.badge}
             </span>
           )}
-          <span className={`px-1.5 py-0.5 rounded text-[9px] font-semibold ${engineMeta.bg} ${engineMeta.color} shrink-0`}>
-            {engineMeta.label}
-          </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 shrink-0">
           <select
             value={agent.engine}
             onChange={handleEngineChange}
-            className="bg-surface-container-high/60 border border-white/10 text-on-surface text-[10px] rounded-lg px-2 py-1 outline-none focus:border-primary-container/50"
+            className="bg-surface-container-high/60 border border-white/10 text-on-surface text-[10px] rounded-lg px-2 py-1 outline-none focus:border-primary-container/50 max-w-[80px] truncate"
           >
             {engineOptions.map(e => (
               <option key={e} value={e}>{ENGINE_META[e]?.label || e}</option>
@@ -94,7 +91,7 @@ function AgentCard({ agent }) {
       {!agent.minimized && (
         <>
           {agent.role === 'overseer' && agent.messages?.length <= 1 && (
-            <div className="px-5 py-3 bg-surface-container-high/30 border-b border-white/5">
+            <div className="px-4 py-3 bg-surface-container-high/30 border-b border-white/5">
               <div className="flex items-center gap-3 text-xs text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-primary-fixed-dim font-light">visibility</span>
                 <span>Memantau task — Workers aktif: {workerCount}/7</span>
@@ -102,7 +99,7 @@ function AgentCard({ agent }) {
             </div>
           )}
           {agent.role === 'distributor' && agent.messages?.length <= 1 && (
-            <div className="px-5 py-3 bg-surface-container-high/30 border-b border-white/5">
+            <div className="px-4 py-3 bg-surface-container-high/30 border-b border-white/5">
               <div className="flex items-center gap-3 text-xs text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-tertiary-fixed-dim font-light">call_split</span>
                 <span>Siap membagi tugas — Kirim deskripsi project</span>
@@ -110,7 +107,7 @@ function AgentCard({ agent }) {
             </div>
           )}
           {agent.role === 'archivist' && agent.messages?.length <= 1 && (
-            <div className="px-5 py-3 bg-surface-container-high/30 border-b border-white/5">
+            <div className="px-4 py-3 bg-surface-container-high/30 border-b border-white/5">
               <div className="flex items-center gap-3 text-xs text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-secondary-fixed-dim font-light">description</span>
                 <span>Mencatat semua progres & dokumentasi — Kirim update untuk dicatat</span>
@@ -118,7 +115,7 @@ function AgentCard({ agent }) {
             </div>
           )}
           {agent.role === 'watcher' && agent.messages?.length <= 1 && (
-            <div className="px-5 py-3 bg-surface-container-high/30 border-b border-white/5">
+            <div className="px-4 py-3 bg-surface-container-high/30 border-b border-white/5">
               <div className="flex items-center gap-3 text-xs text-on-surface-variant">
                 <span className="material-symbols-outlined text-[16px] text-error/70 font-light">shield</span>
                 <span>Memantau kesehatan agent & API keys — Kirim "status" untuk cek</span>

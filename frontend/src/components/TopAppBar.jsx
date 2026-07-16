@@ -9,11 +9,11 @@ export default function TopAppBar({ mobileOnly }) {
     return (
       <header style={{
         position: 'fixed', top: 0, width: '100%', zIndex: 50,
-        height: 52, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        height: 52,
         padding: '0 12px',
         background: 'rgba(8, 14, 8, 0.92)', backdropFilter: 'blur(16px)',
         borderBottom: '1px solid var(--border)',
-      }} className="md:hidden">
+      }} className="flex items-center justify-between md:hidden">
         <button onClick={toggleSidebar} className="text-on-surface-variant hover:text-on-surface p-1.5 rounded-lg hover:bg-white/10 transition-all">
           <span className="material-symbols-outlined text-[22px] font-light">{sidebarOpen ? 'close' : 'menu'}</span>
         </button>
@@ -32,10 +32,9 @@ export default function TopAppBar({ mobileOnly }) {
   return (
     <div style={{
       height: 44, flexShrink: 0,
-      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       padding: '0 20px',
       background: 'rgba(8,14,8,0.5)', borderBottom: '1px solid var(--border-subtle)',
-    }} className="hidden md:flex">
+    }} className="hidden md:flex items-center justify-between">
       <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
         <button onClick={toggleSidebar} className="text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-white/10 transition-all">
           <span className="material-symbols-outlined text-[18px] font-light">{sidebarOpen ? 'menu_open' : 'menu'}</span>

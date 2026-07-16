@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback } fr
 
 const AppContext = createContext(null);
 
-const STORAGE_KEY = 'head-hermes-state';
+const STORAGE_KEY = 'head-hermes-state-v3';
 
 function loadState() {
   try {

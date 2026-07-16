@@ -30,7 +30,7 @@ function AppContent() {
 
       <main className={`flex-1 pt-16 md:pt-0 h-screen overflow-hidden flex flex-col transition-all duration-300 ease-out ${sidebarOpen ? 'md:ml-[260px]' : 'md:ml-0'}`}>
         <TopAppBar />
-        <div className={`flex-1 ${isCommand ? 'overflow-hidden' : 'overflow-y-auto'} p-6 md:p-8 custom-scroll`}>
+        <div className={`flex-1 ${isCommand ? 'overflow-hidden p-0' : 'overflow-y-auto p-6 md:p-8'} custom-scroll`}>
           <div className={`${isCommand ? 'h-full' : ''}`}>
             <ActiveView />
           </div>

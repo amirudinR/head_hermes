@@ -27,36 +27,36 @@ function ChatPanel({ agent }) {
     setInput('');
   };
 
-  const isSpecial = ['overseer', 'distributor', 'watcher'].includes(agent.role);
+  const isSpecial = ['overseer', 'distributor', 'archivist', 'watcher'].includes(agent.role);
 
   return (
     <>
       {isSpecial && agent.systemPrompt && (
-        <div className="px-5 py-2 border-b border-white/5 bg-primary-container/5 shrink-0">
+        <div className="px-4 py-2 border-b border-white/5 bg-primary-container/5 shrink-0">
           <div className="flex items-center gap-2">
             <span className="material-symbols-outlined text-[14px] text-primary-fixed-dim font-light">info</span>
             <span className="text-[11px] text-on-surface-variant/70">{agent.systemPrompt}</span>
           </div>
         </div>
       )}
-      <div ref={bodyRef} className="flex-1 p-5 overflow-y-auto custom-scroll font-body-sm flex flex-col gap-5">
+      <div ref={bodyRef} className="flex-1 p-4 overflow-y-auto min-h-0 custom-scroll font-body-sm flex flex-col gap-4">
         {(agent.messages || []).map((msg, i) => {
           if (msg.role === 'system') return (
             <div key={i} className="flex flex-col gap-1 max-w-[85%] self-start">
               <span className="text-[11px] text-on-surface-variant/60 ml-3">System</span>
-              <div className="px-4 py-3 bg-surface-variant/30 rounded-2xl rounded-tl-sm text-on-surface-variant border border-white/5 text-[13px]">{msg.content}</div>
+              <div className="px-4 py-3 bg-surface-variant/30 rounded-2xl rounded-tl-sm text-on-surface-variant border border-white/5 text-[13px] break-words break-all">{msg.content}</div>
             </div>
           );
           if (msg.role === 'user') return (
             <div key={i} className="flex flex-col gap-1 max-w-[85%] self-end items-end">
               <span className="text-[11px] text-on-surface-variant/60 mr-3">You</span>
-              <div className="px-4 py-3 bg-secondary-container/20 rounded-2xl rounded-tr-sm text-secondary-fixed border border-secondary-container/30 whitespace-pre-wrap">{msg.content}</div>
+              <div className="px-4 py-3 bg-secondary-container/20 rounded-2xl rounded-tr-sm text-secondary-fixed border border-secondary-container/30 whitespace-pre-wrap break-words break-all">{msg.content}</div>
             </div>
           );
           return (
             <div key={i} className="flex flex-col gap-1 max-w-[85%] self-start">
               <span className="text-[11px] text-on-surface-variant/60 ml-3">{agent.name}</span>
-              <div className="px-4 py-3 bg-surface-container-high/50 rounded-2xl rounded-tl-sm text-on-surface border border-white/5 whitespace-pre-wrap">{msg.content}</div>
+              <div className="px-4 py-3 bg-surface-container-high/50 rounded-2xl rounded-tl-sm text-on-surface border border-white/5 whitespace-pre-wrap break-words break-all">{msg.content}</div>
             </div>
           );
         })}
@@ -72,11 +72,11 @@ function ChatPanel({ agent }) {
         )}
       </div>
 
-      <div className="px-5 py-4 border-t border-white/5 bg-surface-container-lowest/30 shrink-0">
+      <div className="px-4 py-4 border-t border-white/5 bg-surface-container-lowest/30 shrink-0">
         <div className="flex items-end bg-surface-container/50 rounded-2xl border border-white/5 focus-within:border-primary-container/30 transition-all">
           <textarea
             ref={textareaRef}
-            className="w-full bg-transparent border-none text-on-surface font-body-sm focus:ring-0 placeholder-on-surface-variant/40 py-3 px-4 outline-none resize-none"
+            className="w-full bg-transparent border-none text-on-surface font-body-sm focus:ring-0 placeholder-on-surface-variant/40 py-3 px-4 outline-none resize-none overflow-y-auto custom-scroll"
             placeholder={`Type a command to ${agent.name}...`}
             value={input}
             onChange={e => setInput(e.target.value)}
